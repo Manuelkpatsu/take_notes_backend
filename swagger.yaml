@@ -1,0 +1,398 @@
+openapi: 3.0.0
+info:
+  title: notes API
+  description: A node and mongoose endpoints for performing CRUD operations with authentication, where users can create an account.
+  contact: {}
+  version: '1.0'
+servers:
+- url: https://my-notes-node-api.herokuapp.com/api/v1
+  variables: {}
+paths:
+  /users/signup:
+    post:
+      tags:
+      - Auth
+      summary: Register Account
+      operationId: RegisterAccount
+      parameters: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              required:
+              - email
+              - password
+              - confirmPassword
+              - username
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: emmaahuno@gmail.com
+                password:
+                  type: string
+                  example: bigdee2010
+                confirmPassword:
+                  type: string
+                  example: bigdee2010
+                username:
+                  type: string
+                  example: Manuel Ahuno
+        required: false
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /users/login:
+    post:
+      tags:
+      - Auth
+      summary: Login
+      operationId: Login
+      parameters: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              required:
+              - email
+              - password
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: emmaahuno@gmail.com
+                password:
+                  type: integer
+                  format: int32
+                  example: 12345678
+        required: false
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /users/activate:
+    patch:
+      tags:
+      - Auth
+      summary: Verify your email
+      operationId: Verifyyouremail
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyyouremailRequest'
+            example:
+              email: emmaahuno@gmail.com
+              code: '173101'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /users/forgot-password:
+    patch:
+      tags:
+      - Auth
+      summary: Forgot Password
+      operationId: ForgotPassword
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+            example:
+              email: emmaahuno@gmail.com
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /users/reset-password:
+    patch:
+      tags:
+      - Auth
+      summary: Reset Password
+      operationId: ResetPassword
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+            example:
+              token: '191190'
+              newPassword: '12345678'
+              confirmPassword: '12345678'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /users/logout:
+    get:
+      tags:
+      - Auth User
+      summary: Logout
+      operationId: Logout
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /users/currentUser:
+    get:
+      tags:
+      - Auth User
+      summary: Fetch current user
+      operationId: Fetchcurrentuser
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /notes/create-note:
+    post:
+      tags:
+      - Notes
+      summary: Create a new note
+      operationId: Createanewnote
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateanewnoteRequest'
+            example:
+              title: God is good
+              content:
+              - insert: Flutter Quill
+              - attributes:
+                  header: 1
+                insert: >2
+
+              - insert: >2-
+
+                  Rich text editor for Flutter
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /notes:
+    get:
+      tags:
+      - Notes
+      summary: Fetch all notes created by a user
+      operationId: Fetchallnotescreatedbyauser
+      parameters:
+      - name: page
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 1
+      - name: size
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 5
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /notes/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The note ID
+    get:
+      tags:
+      - Notes
+      summary: Fetch a note using its ID
+      operationId: FetchanoteusingitsID
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+      - Notes
+      summary: Update a note using its ID
+      operationId: UpdateanoteusingitsID
+      parameters: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              required:
+              - title
+              - content
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Title updated.
+                content:
+                  type: string
+                  example: Content updated!
+        required: false
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+      - Notes
+      summary: Delete a note using its ID
+      operationId: DeleteanoteusingitsID
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+components:
+  schemas:
+    VerifyyouremailRequest:
+      title: VerifyyouremailRequest
+      required:
+      - email
+      - code
+      type: object
+      properties:
+        email:
+          type: string
+        code:
+          type: string
+      example:
+        email: emmaahuno@gmail.com
+        code: '173101'
+    ForgotPasswordRequest:
+      title: ForgotPasswordRequest
+      required:
+      - email
+      type: object
+      properties:
+        email:
+          type: string
+      example:
+        email: emmaahuno@gmail.com
+    ResetPasswordRequest:
+      title: ResetPasswordRequest
+      required:
+      - token
+      - newPassword
+      - confirmPassword
+      type: object
+      properties:
+        token:
+          type: string
+        newPassword:
+          type: string
+        confirmPassword:
+          type: string
+      example:
+        token: '191190'
+        newPassword: '12345678'
+        confirmPassword: '12345678'
+    CreateanewnoteRequest:
+      title: CreateanewnoteRequest
+      required:
+      - title
+      - content
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Content'
+          description: ''
+      example:
+        title: God is good
+        content:
+        - insert: Flutter Quill
+        - attributes:
+            header: 1
+          insert: >2
+
+        - insert: >2-
+
+            Rich text editor for Flutter
+    Content:
+      title: Content
+      required:
+      - insert
+      type: object
+      properties:
+        insert:
+          type: string
+        attributes:
+          $ref: '#/components/schemas/Attributes'
+      example:
+        insert: Flutter Quill
+    Attributes:
+      title: Attributes
+      required:
+      - header
+      type: object
+      properties:
+        header:
+          type: integer
+          format: int32
+      example:
+        header: 1
+  securitySchemes:
+    httpBearer:
+      type: http
+      scheme: bearer
+security:
+- httpBearer: []
+tags:
+- name: Auth
+  description: ''
+- name: Auth User
+  description: ''
+- name: Notes
+  description: ''
+  
