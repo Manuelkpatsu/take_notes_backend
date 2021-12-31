@@ -13,7 +13,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(morgan('combined'))
 
-app.use("/api/users", userRouter)
-app.use("/api/notes", noteRouter)
+app.use("/api/v1/users", userRouter)
+app.use("/api/v1/notes", noteRouter)
 
 module.exports = app
