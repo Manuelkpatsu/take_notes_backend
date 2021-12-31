@@ -13,6 +13,9 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(morgan('combined'))
 
+app.get('/', (req, res) => {
+    res.send('Notes API')
+})
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/notes", noteRouter)
 
